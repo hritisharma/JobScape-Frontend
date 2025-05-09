@@ -15,17 +15,24 @@ import {
     IconMoonStars,
 } from '@tabler/icons-react';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { removeUser } from '../Slices/UserSlice';
 
 const ProfileMenu = () => {
     const [checked, setChecked] = useState(false);
     const [opened, setOpened] = useState(false);
+    const dispatch = useDispatch();
+    const user = useSelector((state: any) => state.user);
+    const handleLogout = () => {
+        dispatch(removeUser());
+    }
     return (
 
         <Menu shadow="md" width={200} opened={opened} onChange={setOpened}>
             <Menu.Target>
                 <div className="flex gap-4 items-center">
-                    <div>Hritik</div>
+                    <div className='text-sm font-semibold'>{user.name}</div>
                     <Avatar src="avatar-9.png" alt="it's me" />
                 </div>
             </Menu.Target>
@@ -61,6 +68,7 @@ const ProfileMenu = () => {
                 <Menu.Item
                     color="red"
                     leftSection={<IconLogout2 size={14} />}
+                    onClick={handleLogout}
                 >
                     Logout
                 </Menu.Item>

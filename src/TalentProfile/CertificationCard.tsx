@@ -1,4 +1,5 @@
 import { IconBookmark } from "@tabler/icons-react";
+import { formatDate } from "../Services/Utilities";
 
 const CertificationCard = (props: any) => {
     return (
@@ -15,7 +16,7 @@ const CertificationCard = (props: any) => {
 
                 {/* Dates aligned at the end and centered vertically */}
                 <div className="text-sm flex flex-col ml-auto justify-center items-center">
-                    <div>{props.issueDate}</div>
+                    <div>Issue date: {formatDate(props.issueDate)}</div>
                     <div>ID: {props.certificateId}</div>
                 </div>
             </div>

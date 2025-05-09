@@ -1,4 +1,5 @@
 import { IconBookmark } from "@tabler/icons-react";
+import { formatDate } from "../Services/Utilities";
 
 const ExperienceCard = (props: any) => {
     return (
@@ -17,7 +18,7 @@ const ExperienceCard = (props: any) => {
 
                 {/* Dates centered at the end of the line */}
                 <div className="text-sm py-2 ml-auto flex justify-center">
-                    {props.startDate} - {props.endDate}
+                    {formatDate(props.startDate)} - {props.working ? "Present" : formatDate(props.endDate)}
                 </div>
             </div>
             <div className="text-sm px-1 text-justify mt-1">{props.description}</div>

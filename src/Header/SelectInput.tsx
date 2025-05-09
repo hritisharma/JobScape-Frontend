@@ -5,8 +5,8 @@ import { Combobox, ScrollArea, InputBase, useCombobox } from '@mantine/core';
 const SelectInput = (props: any) => {
     useEffect(() => {
         setData(props.options)
-        setValue(props.value)
-        setSearch(props.value)
+        setValue(props.form.getInputProps(props.name).value)
+        setSearch(props.form.getInputProps(props.name).value)
     }, [])
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
@@ -19,7 +19,7 @@ const SelectInput = (props: any) => {
     const exactOptionMatch = data.some((item) => item === search);
     const filteredOptions = exactOptionMatch
         ? data
-        : data.filter((item) => item.toLowerCase().includes(search.toLowerCase().trim()));
+        : data.filter((item) => item.toLowerCase().includes(search?.toLowerCase().trim()));
 
     const options = filteredOptions.map((item) => (
         <Combobox.Option value={item} key={item}>
@@ -35,9 +35,11 @@ const SelectInput = (props: any) => {
                 if (val === '$create') {
                     setData((current) => [...current, search]);
                     setValue(search);
+                    props.form.setFieldValue(props.name, search);
                 } else {
                     setValue(val);
                     setSearch(val);
+                    props.form.setFieldValue(props.name, val);
                 }
 
                 combobox.closeDropdown();
@@ -45,10 +47,12 @@ const SelectInput = (props: any) => {
         >
             <Combobox.Target>
                 <InputBase
+                    {...props.form.getInputProps(props.name)}
                     withAsterisk
                     leftSection={<props.leftSection stroke={1.5} />}
                     label={props.label}
                     rightSection={<Combobox.Chevron />}
+                    placeholder={props.placeholder}
                     value={search}
                     onChange={(event) => {
                         combobox.openDropdown();
@@ -68,7 +72,7 @@ const SelectInput = (props: any) => {
             <Combobox.Dropdown>
                 <Combobox.Options>
                     {options}
-                    {!exactOptionMatch && search.trim().length > 0 && (
+                    {!exactOptionMatch && search?.trim()?.length > 0 && (
                         <Combobox.Option value="$create">+ Create {search}</Combobox.Option>
                     )}
                 </Combobox.Options>

@@ -1,10 +1,31 @@
 import { Button } from "@mantine/core";
-import { IconBookmark } from "@tabler/icons-react";
+import { IconBookmark, IconCheck } from "@tabler/icons-react";
 import { useState } from "react";
 import ExpInput from "./ExpInput";
+import { formatDate } from "../Services/Utilities";
+import { useDispatch, useSelector } from "react-redux";
+import { changeProfile } from "../Slices/ProfileSlice";
+import { notifications } from "@mantine/notifications";
 
 const ExperienceCard = (props: any) => {
     const [edit, setEdit] = useState(false);
+    const profile = useSelector((state: any) => state.profile);
+    const dispatch = useDispatch();
+    const handleDelete = () => {
+        let exp = [...profile.experiences];
+        exp.splice(props.index, 1);
+        let updatedProfile = { ...profile, experiences: exp };
+        setEdit(false);
+        dispatch(changeProfile(updatedProfile));
+        notifications.show({
+            title: 'Success',
+            message: "Experience deleted successfully",
+            icon: <IconCheck />,
+            color: "teal",
+            autoClose: 3000,
+        });
+
+    }
     return (
         !edit ? <div>
             <div className="flex justify-between mt-4 px-1 items-center">
@@ -21,15 +42,15 @@ const ExperienceCard = (props: any) => {
 
                 {/* Dates centered at the end of the line */}
                 <div className="text-sm py-2 ml-auto flex justify-center">
-                    {props.startDate} - {props.endDate}
+                    {formatDate(props.startDate)} - {props.working ? "Present" : formatDate(props.endDate)}
                 </div>
             </div>
             <div className="text-sm px-1 text-justify mt-1">{props.description}</div>
             {props.edit && <div className="flex gap-5 mt-4">
                 <Button onClick={() => setEdit(true)} variant="outline" color="web-orange" className="!w-3/3" >Edit</Button>
-                <Button variant="light" color="red.6" className="!w-3/3" >Delete</Button>
+                <Button variant="light" color="red.6" className="!w-3/3" onClick={handleDelete} >Delete</Button>
             </div>}
-        </div > : <ExpInput setEdit={setEdit} />
+        </div > : <ExpInput {...props} setEdit={setEdit} />
     );
 };
 

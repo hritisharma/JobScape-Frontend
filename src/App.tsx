@@ -1,24 +1,17 @@
-import { createTheme, MantineProvider } from '@mantine/core'
+import { createTheme, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import '@mantine/carousel/styles.css';
-import HomePage from './Pages/HomePage';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import FindJobs from './Pages/FindJobs';
-import Header from './Header/Header';
-import Footer from './Footer/Footer';
-import FindTalent from './Pages/FindTalent';
-import PostJobPage from './Pages/PostJobPage';
 import '@mantine/tiptap/styles.css';
-import JobDescPage from './Pages/JobDescPage';
-import ApplyJob from './Pages/ApplyJob';
-import CompanyPage from './Pages/CompanyPage';
-import PostedJob from './Pages/PostedJobPage';
-import PostedJobPage from './Pages/PostedJobPage';
 import '@mantine/dates/styles.css';
-import JobHistoryPage from './Pages/JobHistoryPage';
-import SignUpPage from './Pages/SignUpPage';
-import Profile from './Header/Profile';
-import TalentProfile from './FindTalent/TalentProfile';
+import '@mantine/notifications/styles.css';
+
+import { Notifications } from '@mantine/notifications';
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+
+import { store, persistor } from './Store';
+import AppRoutes from './AppRoutes';
+
 function App() {
   const theme = createTheme({
     colors: {
@@ -28,35 +21,18 @@ function App() {
     primaryColor: 'web-orange',
     primaryShade: 5,
     fontFamily: 'Poppins, sans-serif'
-  })
+  });
+
   return (
-    <MantineProvider defaultColorScheme='dark' theme={theme}>
-
-      <BrowserRouter>
-        <div className='relative'>
-          <Header />
-          <Routes>
-            <Route path='/find-jobs' element={<FindJobs />} />
-            <Route path='/find-talent' element={<FindTalent />} />
-            <Route path='/jobs' element={<JobDescPage />} />
-            <Route path='/apply-job' element={<ApplyJob />} />
-            <Route path='/company' element={<CompanyPage />} />
-            <Route path='/post-job' element={<PostJobPage />} />
-            <Route path='/job-history' element={<JobHistoryPage />} />
-            <Route path='/posted-job' element={<PostedJobPage />} />
-            <Route path='/signup' element={<SignUpPage />} />
-            <Route path='/login' element={<SignUpPage />} />
-            <Route path='/talent-profile' element={<TalentProfile />} />
-            <Route path='/profile' element={<Profile />} />
-            <Route path='*' element={<HomePage />} />
-          </Routes>
-          <Footer />
-        </div>
-      </BrowserRouter>
-
-
-    </MantineProvider>
-  )
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <MantineProvider defaultColorScheme='dark' theme={theme}>
+          <Notifications position='top-right' />
+          <AppRoutes />
+        </MantineProvider>
+      </PersistGate>
+    </Provider>
+  );
 }
 
-export default App
+export default App;

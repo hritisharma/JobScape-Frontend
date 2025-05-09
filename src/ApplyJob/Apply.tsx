@@ -2,29 +2,15 @@ import { Button, Divider, FileInput, LoadingOverlay, NumberInput, Textarea, Text
 import { IconCheck, IconPaperclip } from "@tabler/icons-react";
 import { useState } from "react";
 import { Notification } from "@mantine/core";
+import { timeAgo } from "../Services/Utilities";
+import ApplicationForm from "./ApplicationForm";
 
-const Apply = () => {
-    const [preview, setPreview] = useState(false);
+const Apply = (props: any) => {
+
     const [submit, setSubmit] = useState(false);
     const [time, setTime] = useState(5);
 
-    const handlePreview = () => {
-        setPreview(!preview);
-        window.scroll({ top: 0, behavior: 'smooth' });
-    };
 
-    const handleSubmit = () => {
-        setSubmit(true);
-        let x = 5;
-        setInterval(() => {
-            x--;
-            setTime(x);
-            if (x == 0) {
-                window.location.href = '/find-jobs';
-            }
-
-        }, 1000)
-    };
 
     return (
         <>
@@ -37,84 +23,15 @@ const Apply = () => {
                 />
                 <div className="flex gap-2 items-center">
                     <div className="p-2 bg-mine-shaft-800 rounded-md">
-                        <img className="w-14 h-14" src={`/Icons/Google.png`} alt="Google" />
+                        <img className="w-14 h-14" src={`/Icons/${props.company}.png`} alt="Google" />
                     </div>
                     <div className="p-2">
-                        <div className="text-mine-shaft-100 font-semibold text-2xl">Software Engineer III</div>
-                        <div className="text-mine-shaft-200 text-lg">Google &#x2022; 3 days ago &#x2022; 42 Applicants </div>
+                        <div className="text-mine-shaft-100 font-semibold text-2xl">{props.jobTitle}</div>
+                        <div className="text-mine-shaft-200 text-lg">{props.company} &#x2022;  {timeAgo(props.postTime)} &#x2022; {props.applicants ? props.applicants.length : 0} Applicants </div>
                     </div>
                 </div>
                 <Divider size="xs" className="mb-2 mt-4" />
-                <div className="text-xl font-semibold mt-4 mb-4">Submit your Application</div>
-                <div className="flex flex-col gap-5 mt-2">
-                    <div className="flex gap-10 [&>*]:w-1/2">
-                        <TextInput
-                            label="Full Name"
-                            placeholder="Enter name"
-                            withAsterisk
-                            readOnly={preview}
-                            variant={preview ? "unstyled" : "default"}
-                            className={`${preview ? "text-mine-shaft-300 font-semibold" : ""}`}
-                        />
-                        <TextInput
-                            label="Email"
-                            placeholder="Enter email"
-                            withAsterisk
-                            readOnly={preview}
-                            variant={preview ? "unstyled" : "default"}
-                            className={`${preview ? "text-mine-shaft-300 font-semibold" : ""}`}
-                        />
-                    </div>
-                    <div className="flex gap-10 [&>*]:w-1/2">
-                        <NumberInput
-                            label="Phone Number"
-                            placeholder="Enter number"
-                            withAsterisk
-                            hideControls
-                            min={0}
-                            max={9999999999}
-                            clampBehavior="strict"
-                            readOnly={preview}
-                            variant={preview ? "unstyled" : "default"}
-                            className={`${preview ? "text-mine-shaft-300 font-semibold" : ""}`}
-                        />
-                        <TextInput
-                            label="Links"
-                            placeholder="Enter url"
-                            withAsterisk
-                            readOnly={preview}
-                            variant={preview ? "unstyled" : "default"}
-                            className={`${preview ? "text-mine-shaft-300 font-semibold" : ""}`}
-                        />
-                    </div>
-
-                    <FileInput
-                        leftSection={<IconPaperclip stroke={1.5} />}
-                        label="Attach Resume"
-                        placeholder="Attach Resume"
-                        withAsterisk
-                        readOnly={preview}
-                        variant={preview ? "unstyled" : "default"}
-                        className={`${preview ? "text-mine-shaft-300 font-semibold" : ""}`}
-                    />
-                    <Textarea
-                        label="Cover Letter"
-                        placeholder="Type something about yourself...."
-                        autosize
-                        minRows={4}
-                        withAsterisk
-                        readOnly={preview}
-                        variant={preview ? "unstyled" : "default"}
-                        className={`${preview ? "text-mine-shaft-300 font-semibold" : ""}`}
-                    />
-                    {!preview && <Button onClick={handlePreview} className="!w-1/5 mt-5" variant="outline">Preview</Button>}
-                    {preview && (
-                        <div className="flex gap-3">
-                            <Button onClick={handlePreview} className="!w-1/5 mt-5" variant="outline">Edit</Button>
-                            <Button onClick={handleSubmit} className="!w-1/5 mt-5" variant="outline">Submit</Button>
-                        </div>
-                    )}
-                </div>
+                <ApplicationForm />
             </div>
 
             <Notification

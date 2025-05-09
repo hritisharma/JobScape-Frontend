@@ -1,25 +1,65 @@
-import { IconBriefcase, IconDeviceFloppy, IconMapPin, IconPencil, IconPlus } from "@tabler/icons-react";
-import { ActionIcon, Button, TagsInput, Textarea } from "@mantine/core";
-import { Divider } from "@mantine/core";
-import ExperienceCard from "./ExperienceCard";
-import CertificationCard from "./CertificationCard";
-import { profile } from "../Data/TalentData";
-import { useState } from "react";
-import SelectInput from "./SelectInput";
+import {
+    IconBriefcase,
+    IconCheck,
+    IconDeviceFloppy,
+    IconEdit,
+    IconMapPin,
+    IconPencil,
+    IconPlus,
+    IconX,
+} from "@tabler/icons-react";
+import {
+    ActionIcon,
+    Avatar,
+    Button,
+    Divider,
+    FileInput,
+    Overlay,
+    TagsInput,
+    Textarea,
+} from "@mantine/core";
+
+import { useEffect, useState } from "react";
 import fields from "../Data/Profile";
-import ExpInput from "./ExpInput";
-import CertiInput from "./CertiInput";
+import { getProfile, updateProfile } from "../Services/ProfileService";
+import { useDispatch, useSelector } from "react-redux";
+import Info from "./Info";
+import { changeProfile, setProfile } from "../Slices/ProfileSlice";
+import AboutSection from "./AboutSection";
+import SkillsSection from "./SkillsSection";
+import ExperienceSection from "./ExperienceSection";
+import CertificationSection from "./CertificationSection";
+import { useHover } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 
 const Profile = () => {
+    const user = useSelector((state: any) => state.user);
+    const profile = useSelector((state: any) => state.profile);
+    const dispatch = useDispatch();
     const select = fields;
     const [edit, setEdit] = useState([false, false, false, false, false]);
     const [addExp, setAddExp] = useState(false);
-    const [addCerti, setAddCerti] = useState(false);
+    const { hovered, ref } = useHover();
     const [skills, setSkills] = useState([
-        "React", "SpringBoot", "MongoDB", "HTML", "CSS", "JavaScript", "Node.js", "Express",
-        "MySQL", "Python", "Django", "Figma", "Sketch", "Docker", "AWS"
+        "React",
+        "SpringBoot",
+        "MongoDB",
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Node.js",
+        "Express",
+        "MySQL",
+        "Python",
+        "Django",
+        "Figma",
+        "Sketch",
+        "Docker",
+        "AWS",
     ]);
-    const [about, setAbout] = useState("As a Software Engineer at Google, I specialize in building scalable and high-performance applications. My expertise lies in integrating front-end and back-end technologies to deliver seamless user experiences. With a strong foundation in React and SpringBoot, and a focus on MongoDB for database solutions, I am passionate about leveraging the latest technologies to solve complex problems and drive innovation. My goal is to create impactful software that enhances productivity and meets user needs effectively.");
+    const [about, setAbout] = useState(
+        "As a Software Engineer at Google, I specialize in building scalable and high-performance applications. My expertise lies in integrating front-end and back-end technologies to deliver seamless user experiences. With a strong foundation in React and SpringBoot, and a focus on MongoDB for database solutions, I am passionate about leveraging the latest technologies to solve complex problems and drive innovation. My goal is to create impactful software that enhances productivity and meets user needs effectively."
+    );
 
     const handleEdit = (index: number) => {
         const newEdit = [...edit];
@@ -28,152 +68,103 @@ const Profile = () => {
         console.log(newEdit);
     };
 
+    useEffect(() => {
+        getProfile(user.id)
+            .then((data: any) => {
+                dispatch(setProfile(data));
+                console.log("Fetched data:", data); // ✅ Valid
+            })
+            .catch((error: any) => {
+                console.log("Profile fetch error:", error);
+            });
+    }, []);
+
+
+    // const handleFileChange = async (image: any) => {
+    //     try {
+    //         console.log("File selected:", image); // Check if file is being received
+
+    //         if (!image) {
+    //             console.error("No file selected");
+    //             return;
+    //         }
+
+    //         let picture: any = await getBase64(image);
+    //         console.log("Base64 result:", picture ? "Success" : "Failed"); // Check if base64 conversion succeeded
+    //         console.log("Base64 length:", picture ? picture.length : 0); // Check length instead of full string
+
+    //         // Rest of your code
+    //         let updatedProfile = { ...profile, picture: picture.split(',')[1] };
+    //         dispatch(changeProfile(updatedProfile));
+    //         notifications.show({
+    //             title: 'Success',
+    //             message: "Profile Picture updated successfully",
+    //             icon: <IconCheck />,
+    //             color: "teal",
+    //             autoClose: 3000,
+    //         });
+    //     } catch (error) {
+    //         console.error("Error in handleFileChange:", error);
+    //     }
+    // }
+
+    // const getBase64 = (file: any) => {
+    //     return new Promise((resolve, reject) => {
+    //         console.log("Starting file conversion"); // Debug log
+    //         const reader = new FileReader();
+
+    //         reader.onload = () => {
+    //             console.log("File read successful"); // Debug log
+    //             resolve(reader.result);
+    //         };
+
+    //         reader.onerror = error => {
+    //             console.error("Error reading file:", error); // Debug error
+    //             reject(error);
+    //         };
+
+    //         reader.readAsDataURL(file);
+    //     });
+    // }
+
     return (
         <div className="w-4/5 mx-auto px-4 py-10 mb-10">
             <div className="relative">
-                <img className="rounded-t-xl" src="banner.jpg" alt="banner" />
-                <img className="rounded-full w-48 h-48 -bottom-3 left-2 border-8 absolute" src="avatar.png" alt="avatar" />
-            </div>
-            <div className="mt-10 px-2">
-                <div className="flex justify-between text-3xl font-semibold">
-                    Jarrod Wood
-                    <ActionIcon color="web-orange.5" size={"lg"} variant="subtle">
-                        {edit[0] ? (
-                            <IconDeviceFloppy onClick={() => handleEdit(0)} className="w-8 h-8" />
-                        ) : (
-                            <IconPencil onClick={() => handleEdit(0)} className="w-8 h-8" />
-                        )}
-                    </ActionIcon>
-                </div>
-                {edit[0] ? (
-                    <>
-                        <div className="flex gap-10 [&>*]:w-1/2 h-20 mt-2 ">
-                            <SelectInput {...select[0]} />
-                            <SelectInput {...select[1]} />
-                        </div>
-                        <SelectInput {...select[2]} />
-                    </>
-                ) : (
-                    <>
-                        <div className="text-xl flex gap-1 items-center">
-                            <IconBriefcase stroke={1.5} /> Software Engineer &#x2022; Google
-                        </div>
-                        <div className="flex gap-1 text-lg items-center text-mine-shaft-300">
-                            <IconMapPin stroke={1.5} /> New York, United States
-                        </div>
-                    </>
-                )}
-            </div>
-
-            <Divider size="xs" className="mt-10" />
-
-            <div>
-                <div className="text-2xl font-semibold mt-4 mx-1 justify-between flex mb-8">
-                    About
-                    <ActionIcon color="web-orange.5" size={"lg"} variant="subtle">
-                        {edit[1] ? (
-                            <IconDeviceFloppy onClick={() => handleEdit(1)} className="w-8 h-8" />
-                        ) : (
-                            <IconPencil onClick={() => handleEdit(1)} className="w-8 h-8" />
-                        )}
-                    </ActionIcon>
-                </div>
-                {edit[1] ? (
-                    <Textarea
-                        value={about}
-                        autosize
-                        placeholder="Enter about yourself......"
-                        onChange={(event) => setAbout(event.currentTarget.value)}
-                        minRows={3}
+                <img className="rounded-t-xl w-full" src="banner.jpg" alt="banner" />
+                <div className="absolute -bottom-3 left-3 flex items-center justify-center cursor-pointer" ref={ref}>
+                    <Avatar
+                        src="avatar.png"
+                        alt="avatar"
+                        radius="xl"
+                        className="!w-48 !h-48 !rounded-full border-8 border-white shadow-lg"
                     />
-                ) : (
-                    <div className="text-sm text-mine-shaft-200 text-justify mt-2 px-1">
-                        {about}
-                    </div>
-                )}
-            </div>
-
-            <Divider size="xs" className="mt-10" />
-
-            <div>
-                <div className="text-2xl font-semibold mt-4 mx-1 flex justify-between mb-8">
-                    Skills
-                    <ActionIcon color="web-orange.5" size={"lg"} variant="subtle" onClick={() => setAddExp(true)}>
-                        {edit[2] ? (
-                            <IconDeviceFloppy onClick={() => handleEdit(2)} className="w-8 h-8" />
-                        ) : (
-                            <IconPencil onClick={() => handleEdit(2)} className="w-8 h-8" />
-                        )}
-                    </ActionIcon>
-                </div>
-                <div className="text-sm text-mine-shaft-200 text-justify mt-2 px-1">
-                    {edit[2] ? (
-                        <TagsInput
-                            placeholder="Add Skill"
-                            value={skills}
-                            onChange={setSkills}
-                            splitChars={[',', ' ', '|']}
+                    {hovered && (
+                        <Overlay
+                            color="#000"
+                            backgroundOpacity={0.25}
+                            className="!rounded-full absolute z-[300]"
                         />
-                    ) : (
-                        <div className="flex flex-wrap mt-1 gap-4 my-3">
-                            {skills.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className="bg-mine-shaft-900 text-web-orange-500 rounded-full border-2 border-web-orange-500 text-md px-2 py-1"
-                                >
-                                    {item}
-                                </div>
-                            ))}
-                        </div>
                     )}
+                    {hovered && <FileInput
+                        className="absolute z-[301] w-full h-full [&_*]:!h-full [&_*]:!rounded-full" variant="transparent" accept="image/png,image/jpeg,image/jpg"
+                    />}
+                    {hovered && <IconEdit className="absolute z-11 text-mine-shaft-100 !w-16 !h-16" stroke={1.5} />}
                 </div>
+            </div>
+
+            <div className="mt-10">
+                <Info />
+
                 <Divider size="xs" className="mt-10" />
-            </div>
+                <AboutSection />
 
-            <div>
-                <div className="text-2xl font-semibold mt-4 mx-1 flex justify-between">
-                    Experience
-                    <div className="flex gap-4">
-                        <ActionIcon onClick={() => setAddExp(true)} color="web-orange.5" size={"lg"} variant="subtle">
-                            <IconPlus className="w-4/5 h-4/5" />
-                        </ActionIcon>
-                        <ActionIcon color="web-orange.5" size={"lg"} variant="subtle">
-                            {edit[3] ? (
-                                <IconDeviceFloppy onClick={() => handleEdit(3)} className="w-8 h-8" />
-                            ) : (
-                                <IconPencil onClick={() => handleEdit(3)} className="w-4/5 h-4/5" />
-                            )}
-                        </ActionIcon>
-                    </div>
-                </div>
-                {profile.experience.map((item, index) => (
-                    <ExperienceCard key={index} {...item} edit={edit[3]} />
-                ))}
-                {addExp && <ExpInput add setEdit={setAddExp} />}
-            </div>
+                <SkillsSection />
+                <Divider size="xs" className="mt-10" />
 
-            <Divider size="xs" className="mt-10" />
+                <ExperienceSection />
+                <Divider size="xs" className="mt-10" />
 
-            <div>
-                <div className="text-2xl font-semibold mt-4 mx-1 flex justify-between">
-                    Certification
-                    <div className="flex gap-4">
-                        <ActionIcon onClick={() => setAddCerti(true)} color="web-orange.5" size={"lg"} variant="subtle">
-                            <IconPlus className="w-4/5 h-4/5" />
-                        </ActionIcon>
-                        <ActionIcon color="web-orange.5" size={"lg"} variant="subtle">
-                            {edit[4] ? (
-                                <IconDeviceFloppy onClick={() => handleEdit(4)} className="w-8 h-8" />
-                            ) : (
-                                <IconPencil onClick={() => handleEdit(4)} className="w-4/5 h-4/5" />
-                            )}
-                        </ActionIcon>
-                    </div>
-                </div>
-                {profile.certifications.map((item, index) => (
-                    <CertificationCard key={index} {...item} edit={edit[4]} />
-                ))}
-                {addCerti && <CertiInput setEdit={setAddCerti} />}
+                <CertificationSection />
             </div>
         </div>
     );
