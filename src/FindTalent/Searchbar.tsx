@@ -15,14 +15,14 @@ const Searchbar = () => {
             dispatch(updateFilter({ exp: event }))
         }
         else {
-            setName(event.target.value)
+            (event.target.value)
             dispatch(updateFilter({ name: event.target.value }))
         }
     }
     return (
 
-        <div className=" flex justify-between gap-3 px-1">
-            <div className="flex">
+        <div className="flex justify-between gap-3 px-1">
+            <div className="flex flex-1">
                 <div className="text-web-orange-500 rounded-full bg-mine-shaft-900 p-1 mr-2">
                     <IconUserCircle size={27} />
                 </div>
@@ -31,21 +31,33 @@ const Searchbar = () => {
             </div>
             <Divider size="xs" orientation="vertical" />
             {
-                searchFields.map((item, index) => <> <div key={index} className="w-1/5">
-                    <MultiInput {...item} />
-                </div>  <Divider size="xs" orientation="vertical" /></>
-                )
+                searchFields.map((item, index) => <>
+                    <div key={index} className="min-w-[180px] flex-1">
+                        <MultiInput {...item} />
+                    </div>
+                    <Divider size="xs" orientation="vertical" />
+                </>)
             }
-            <div className="w-1/5 [&_.matine-Slider-root]:!translate-y-10">
+            <div className="min-w-[180px] flex-1 [&_.matine-Slider-root]:!translate-y-10">
                 <div className="flex justify-between text-sm">
                     <div>Experience</div>
-                    <div>{value[0]}  -  {value[1]} Years</div>
+                    <div>{value[1]} Years</div>
                 </div>
-                <RangeSlider minRange={1} onChangeEnd={(e) => handleChange("exp", e)} color="web-orange" size={"sm"} value={value} onChange={setValue} max={50} min={0} labelTransitionProps={{
-                    transition: 'skew-down',
-                    duration: 150,
-                    timingFunction: 'linear',
-                }} />
+                <RangeSlider
+                    minRange={1}
+                    onChangeEnd={(e) => handleChange("exp", e)}
+                    color="web-orange"
+                    size={"sm"}
+                    value={value}
+                    onChange={setValue}
+                    max={50}
+                    min={0}
+                    labelTransitionProps={{
+                        transition: 'skew-down',
+                        duration: 150,
+                        timingFunction: 'li near',
+                    }}
+                />
             </div>
         </div>
 

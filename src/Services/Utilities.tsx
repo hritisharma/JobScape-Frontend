@@ -9,6 +9,23 @@ function timeAgo(time: string) {
     const postDate = new Date(time);
     const diffInSeconds = Math.floor((now.getTime() - postDate.getTime()) / 1000); // ✅ Convert ms to seconds
 
+    // If the date is in the future (like interview time), show remaining time
+    if (diffInSeconds < 0) {
+        const absDiffInSeconds = Math.abs(diffInSeconds);
+        const minutes = Math.floor(absDiffInSeconds / 60);
+        const hours = Math.floor(absDiffInSeconds / 3600);
+        const days = Math.floor(absDiffInSeconds / 86400);
+
+        if (minutes < 60) {
+            return `in ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+        } else if (hours < 24) {
+            return `in ${hours} hour${hours !== 1 ? 's' : ''}`;
+        } else {
+            return `in ${days} day${days !== 1 ? 's' : ''}`;
+        }
+    }
+
+    // For past dates, show time ago
     const minutes = Math.floor(diffInSeconds / 60);
     const hours = Math.floor(diffInSeconds / 3600);
     const days = Math.floor(diffInSeconds / 86400);

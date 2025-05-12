@@ -11,11 +11,13 @@ const Talents = () => {
     const sort = useSelector((state: any) => state.sort);
     const dispatch = useDispatch();
     const filter = useSelector((state: any) => state.filter);
+    const user = useSelector((state: any) => state.user);
     const [filteredTalent, setFilteredTalent] = useState<any>([]);
     useEffect(() => {
         dispatch(resetFilter());
         getAll().then((res) => {
-            setTalents(res);
+            const filtered = res.filter((talent: any) => talent.id !== user.id && talent.accountType !== "EMPLOYER");
+            setTalents(filtered);
         }).catch((error) => {
             console.log(error);
         })

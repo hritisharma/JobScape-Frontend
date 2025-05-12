@@ -124,7 +124,7 @@ const PostJob = (props: any) => {
         } = {
             ...values,
             postedBy: user.id,
-            jobStatus: "DRAFT",
+            jobStatus: "Drafted",
         };
 
         if (id !== "0") {
@@ -135,7 +135,7 @@ const PostJob = (props: any) => {
             .then((res) => {
                 notifications.show({
                     title: 'Success',
-                    message: `Job Drafted successfully`,
+                    message: `Job published successfully`,
                     icon: <IconCheck />,
                     color: "teal",
                     autoClose: 3000,

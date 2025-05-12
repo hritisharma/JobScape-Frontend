@@ -16,4 +16,22 @@ axiosInstance.interceptors.request.use(
         return Promise.reject(error);
     }
 )
+
+export const setupResponseInterceptor = (navigate: any) => {
+    axiosInstance.interceptors.response.use(
+        (response) => {
+            console.log("Inside normal response", response);  // Log the successful response
+            return response;
+        },
+        (error) => {
+            console.log("Inside error handler", error);
+            // if (error.response?.status == 401) {
+            //     console.log("401 Unauthorized error detected");
+            //     navigate("/login");
+            // }
+            return Promise.reject(error);
+        }
+    );
+}
+
 export default axiosInstance;

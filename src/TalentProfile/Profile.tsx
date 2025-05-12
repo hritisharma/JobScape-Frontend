@@ -38,7 +38,7 @@ const Profile = () => {
 
 
             <div className="mt-10 px-2">
-                <div className="flex justify-between text-3xl font-semibold">{user.name}<Button variant="light" color="web-orange" className="!w-3/3" >Message</Button></div>
+                <div className="flex justify-between text-3xl font-semibold">{profile.name}<Button variant="light" color="web-orange" className="!w-3/3" >Message</Button></div>
                 <div className="text-xl flex gap-1 items-center"><IconBriefcase stroke={1.5} />{profile?.jobTitle} &#x2022; {profile?.company}</div>
                 <div className="flex gap-1 text-lg items-center text-mine-shaft-300">
                     <IconMapPin stroke={1.5} /> {profile?.location}

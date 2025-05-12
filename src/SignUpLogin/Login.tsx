@@ -58,19 +58,23 @@ const Login = () => {
                 setTimeout(() => {
                     setLoading(false);
                     dispatch(setUser({ ...decoded, email: decoded.sub }));
-                    navigate("/");
+                    navigate("/home");
                 }, 3000)
 
             }).catch((error) => {
-                console.log(error)
+                console.log(error);
                 setLoading(false);
+
+                // Safe error handling
+                const errorMessage = error?.response?.data?.errorMessage || "An error occurred during login";
+
                 notifications.show({
                     title: 'Login failed',
-                    message: error.response.data.errorMessage,
+                    message: errorMessage,
                     icon: <IconX />,
                     color: "red.6",
                     autoClose: 3000
-                })
+                });
             });
         }
 

@@ -7,10 +7,9 @@ import '@mantine/notifications/styles.css';
 
 import { Notifications } from '@mantine/notifications';
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
 
-import { store, persistor } from './Store';
 import AppRoutes from './AppRoutes';
+import Store from './Store';
 
 function App() {
   const theme = createTheme({
@@ -23,14 +22,13 @@ function App() {
     fontFamily: 'Poppins, sans-serif'
   });
 
+
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <MantineProvider defaultColorScheme='dark' theme={theme}>
-          <Notifications position='top-right' />
-          <AppRoutes />
-        </MantineProvider>
-      </PersistGate>
+    <Provider store={Store}>
+      <MantineProvider defaultColorScheme='dark' theme={theme}>
+        <Notifications position='top-right' />
+        <AppRoutes />
+      </MantineProvider>
     </Provider>
   );
 }

@@ -11,7 +11,7 @@ const NavLinks = () => {
 
     const location = useLocation();
     return (
-        <div className="flex gap-5 text-mine-shaft-300 h-full items-center">
+        <div className="flex gap-5 text-mine-shaft-300 h-full items-center bs-mx:hidden">
             {
                 links.map((link, index) =>
                     <div className={`${location.pathname === "/" + link.url ? "border-web-orange-500 text-web-orange-500" : "border-transparent"} border-t-[3px] h-full flex items-center hover:text-web-orange-500 hover:translate-y-1 transition-all duration-300`}>
