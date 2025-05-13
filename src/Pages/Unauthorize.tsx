@@ -12,7 +12,7 @@ const Unauthorize = () => {
                 <p className="text-yellow-300 mb-6">
                     Sorry, you don’t have permission to view this page.
                 </p>
-                <Button variant="outline" onClick={() => navigate("/")} className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-6 rounded transition duration-200">Go to Homepage</Button>
+                <Button variant="outline" onClick={() => navigate("/home")} className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-6 rounded transition duration-200">Go to Homepage</Button>
             </div>
         </div>
     );
